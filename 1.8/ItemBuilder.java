@@ -12,7 +12,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 public class ItemBuilder {
-    private ItemStack item; // RENDERED ITEM
+    private final ItemStack item; // RENDERED ITEM
     // CONSTRUCTORS
     public ItemBuilder(ItemStack item) {
         this.item = item;
