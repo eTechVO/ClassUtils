@@ -1,4 +1,4 @@
-package fr.xmascraft.tools;
+package fr.xmascraft.managers;
 
 import com.mojang.authlib.GameProfile;
 import fr.xmascraft.tools.utils.CustomPlayer;
@@ -20,7 +20,17 @@ public class NPCManager {
         GameProfile profile = new GameProfile(uuid == null ? UUID.randomUUID() : uuid, name.replace("&", "§"));
 
         EntityPlayer npc = new EntityPlayer(server, world, profile, new PlayerInteractManager(world));
-        npc.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+        npc.setPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+
+        player.sendPackets(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, npc), new PacketPlayOutNamedEntitySpawn(npc), new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, npc));
+    }
+    public void spawn(@Nonnull CustomPlayer player, @Nonnull Location location, @Nullable UUID uuid, @Nonnull String name) {
+        MinecraftServer server = ((CraftServer) Bukkit.getServer()).getServer();
+        WorldServer world = ((CraftWorld) location.getWorld()).getHandle();
+        GameProfile profile = new GameProfile(uuid == null ? UUID.randomUUID() : uuid, name.replace("&", "§"));
+
+        EntityPlayer npc = new EntityPlayer(server, world, profile, new PlayerInteractManager(world));
+        npc.setPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
 
         player.sendPackets(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, npc), new PacketPlayOutNamedEntitySpawn(npc), new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, npc));
     }
